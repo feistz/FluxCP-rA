@@ -7,9 +7,13 @@ $mobID = $params->get('id');
 require_once 'Flux/TemporaryTable.php';
 
 // Monsters table.
-$mobDB      = "{$server->charMapDatabase}.monsters";
-$fromTables = array("{$server->charMapDatabase}.mob_db", "{$server->charMapDatabase}.mob_db2");
-$tempMobs   = new Flux_TemporaryTable($server->connection, $mobDB, $fromTables);
+if($server->isRenewal) {
+	$fromTables = array("{$server->charMapDatabase}.mob_db", "{$server->charMapDatabase}.mob_db_re", "{$server->charMapDatabase}.mob_db2");
+} else {
+	$fromTables = array("{$server->charMapDatabase}.mob_db", "{$server->charMapDatabase}.mob_db2");
+}
+$mobDB    = "{$server->charMapDatabase}.monsters";
+$tempMobs = new Flux_TemporaryTable($server->connection, $mobDB, $fromTables);
 
 // Monster Skills table.
 $skillDB    = "{$server->charMapDatabase}.mobskills";
@@ -17,9 +21,13 @@ $fromTables = array("{$server->charMapDatabase}.mob_skill_db", "{$server->charMa
 $tempSkills = new Flux_TemporaryTable($server->connection, $skillDB, $fromTables);
 
 // Items table.
-$itemDB     = "{$server->charMapDatabase}.items";
-$fromTables = array("{$server->charMapDatabase}.item_db", "{$server->charMapDatabase}.item_db2");
-$tempItems  = new Flux_TemporaryTable($server->connection, $itemDB, $fromTables);
+if($server->isRenewal) {
+	$fromTables = array("{$server->charMapDatabase}.item_db", "{$server->charMapDatabase}.item_db_re", "{$server->charMapDatabase}.item_db2");
+} else {
+	$fromTables = array("{$server->charMapDatabase}.item_db", "{$server->charMapDatabase}.item_db2");
+}
+$itemDB    = "{$server->charMapDatabase}.items";
+$tempItems = new Flux_TemporaryTable($server->connection, $itemDB, $fromTables);
 
 $col  = 'origin_table, ID as monster_id, Sprite AS sprite, kName AS kro_name, iName AS iro_name, LV AS level, HP AS hp, ';
 $col .= 'EXP AS base_exp, JEXP as job_exp, Range1 AS range1, Range2 AS range2, Range3 AS range3, ';

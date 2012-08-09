@@ -69,9 +69,13 @@ if ($picks) {
 	require_once 'Flux/TemporaryTable.php';
 	
 	if ($mobIDs) {
-		$mobDB      = "{$server->charMapDatabase}.monsters";
-		$fromTables = array("{$server->charMapDatabase}.mob_db", "{$server->charMapDatabase}.mob_db2");
-		$tempMobs   = new Flux_TemporaryTable($server->connection, $mobDB, $fromTables);
+		if($server->isRenewal) {
+			$fromTables = array("{$server->charMapDatabase}.mob_db", "{$server->charMapDatabase}.mob_db_re", "{$server->charMapDatabase}.mob_db2");
+		} else {
+			$fromTables = array("{$server->charMapDatabase}.mob_db", "{$server->charMapDatabase}.mob_db2");
+		}
+		$mobDB    = "{$server->charMapDatabase}.monsters";
+		$tempMobs = new Flux_TemporaryTable($server->connection, $mobDB, $fromTables);
 
 		$ids = array_keys($mobIDs);
 		$sql = "SELECT ID, iName FROM {$server->charMapDatabase}.monsters WHERE ID IN (".implode(',', array_fill(0, count($ids), '?')).")";
@@ -87,10 +91,14 @@ if ($picks) {
 	}
 
 	if ($itemIDs) {
-		$tableName  = "{$server->charMapDatabase}.items";
-		$fromTables = array("{$server->charMapDatabase}.item_db", "{$server->charMapDatabase}.item_db2");
-		$tempTable  = new Flux_TemporaryTable($server->connection, $tableName, $fromTables);
-		$shopTable  = Flux::config('FluxTables.ItemShopTable');
+		if($server->isRenewal) {
+			$fromTables = array("{$server->charMapDatabase}.item_db", "{$server->charMapDatabase}.item_db_re", "{$server->charMapDatabase}.item_db2");
+		} else {
+			$fromTables = array("{$server->charMapDatabase}.item_db", "{$server->charMapDatabase}.item_db2");
+		}
+		$tableName = "{$server->charMapDatabase}.items";
+		$tempTable = new Flux_TemporaryTable($server->connection, $tableName, $fromTables);
+		$shopTable = Flux::config('FluxTables.ItemShopTable');
 
 		$ids = array_keys($itemIDs);
 		$sql = "SELECT id, name_japanese FROM {$server->charMapDatabase}.items WHERE id IN (".implode(',', array_fill(0, count($ids), '?')).")";

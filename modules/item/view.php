@@ -7,14 +7,14 @@ $title = 'Viewing Item';
 
 require_once 'Flux/TemporaryTable.php';
 
-$tableName  = "{$server->charMapDatabase}.items";
 if($server->isRenewal) {
 	$fromTables = array("{$server->charMapDatabase}.item_db", "{$server->charMapDatabase}.item_db_re", "{$server->charMapDatabase}.item_db2");
 } else {
 	$fromTables = array("{$server->charMapDatabase}.item_db", "{$server->charMapDatabase}.item_db2");
 }
-$tempTable  = new Flux_TemporaryTable($server->connection, $tableName, $fromTables);
-$shopTable  = Flux::config('FluxTables.ItemShopTable');
+$tableName = "{$server->charMapDatabase}.items";
+$tempTable = new Flux_TemporaryTable($server->connection, $tableName, $fromTables);
+$shopTable = Flux::config('FluxTables.ItemShopTable');
 
 $itemID = $params->get('id');
 
@@ -40,9 +40,13 @@ if ($item) {
 	$title = "Viewing Item ($item->name)";
 	$isCustom = (bool)preg_match('/item_db2$/', $item->origin_table);
 	
-	$mobDB      = "{$server->charMapDatabase}.monsters";
-	$fromTables = array("{$server->charMapDatabase}.mob_db", "{$server->charMapDatabase}.mob_db2");
-	$mobTable   = new Flux_TemporaryTable($server->connection, $mobDB, $fromTables);
+	if($server->isRenewal) {
+		$fromTables = array("{$server->charMapDatabase}.mob_db", "{$server->charMapDatabase}.mob_db_re", "{$server->charMapDatabase}.mob_db2");
+	} else {
+		$fromTables = array("{$server->charMapDatabase}.mob_db", "{$server->charMapDatabase}.mob_db2");
+	}
+	$mobDB    = "{$server->charMapDatabase}.monsters";
+	$mobTable = new Flux_TemporaryTable($server->connection, $mobDB, $fromTables);
 	
 	$col  = 'ID AS monster_id, iName AS monster_name, LV AS monster_level, ';
 	$col .= 'Race AS monster_race, (Element%10) AS monster_element, (Element/20) AS monster_ele_lv, ';

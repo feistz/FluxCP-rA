@@ -4,13 +4,13 @@ if (!defined('FLUX_ROOT')) exit;
 require_once 'Flux/Config.php';
 require_once 'Flux/TemporaryTable.php';
 
-$tableName  = "{$server->charMapDatabase}.items";
 if($server->isRenewal) {
 	$fromTables = array("{$server->charMapDatabase}.item_db", "{$server->charMapDatabase}.item_db_re", "{$server->charMapDatabase}.item_db2");
 } else {
 	$fromTables = array("{$server->charMapDatabase}.item_db", "{$server->charMapDatabase}.item_db2");
 }
-$tempTable  = new Flux_TemporaryTable($server->connection, $tableName, $fromTables);
+$tableName = "{$server->charMapDatabase}.items";
+$tempTable = new Flux_TemporaryTable($server->connection, $tableName, $fromTables);
 
 $title = 'Modify Item';
 
