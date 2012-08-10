@@ -7,13 +7,9 @@ $mobID = $params->get('id');
 require_once 'Flux/TemporaryTable.php';
 
 // Monsters table.
-if($server->isRenewal) {
-	$fromTables = array("{$server->charMapDatabase}.mob_db", "{$server->charMapDatabase}.mob_db_re", "{$server->charMapDatabase}.mob_db2");
-} else {
-	$fromTables = array("{$server->charMapDatabase}.mob_db", "{$server->charMapDatabase}.mob_db2");
-}
-$mobDB    = "{$server->charMapDatabase}.monsters";
-$tempMobs = new Flux_TemporaryTable($server->connection, $mobDB, $fromTables);
+$mobDB      = "{$server->charMapDatabase}.monsters";
+$fromTables = array("{$server->charMapDatabase}.mob_db", "{$server->charMapDatabase}.mob_db2");
+$tempMobs   = new Flux_TemporaryTable($server->connection, $mobDB, $fromTables);
 
 // Monster Skills table.
 $skillDB    = "{$server->charMapDatabase}.mobskills";

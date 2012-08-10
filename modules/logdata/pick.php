@@ -69,13 +69,9 @@ if ($picks) {
 	require_once 'Flux/TemporaryTable.php';
 	
 	if ($mobIDs) {
-		if($server->isRenewal) {
-			$fromTables = array("{$server->charMapDatabase}.mob_db", "{$server->charMapDatabase}.mob_db_re", "{$server->charMapDatabase}.mob_db2");
-		} else {
-			$fromTables = array("{$server->charMapDatabase}.mob_db", "{$server->charMapDatabase}.mob_db2");
-		}
-		$mobDB    = "{$server->charMapDatabase}.monsters";
-		$tempMobs = new Flux_TemporaryTable($server->connection, $mobDB, $fromTables);
+		$mobDB      = "{$server->charMapDatabase}.monsters";
+		$fromTables = array("{$server->charMapDatabase}.mob_db", "{$server->charMapDatabase}.mob_db2");
+		$tempMobs   = new Flux_TemporaryTable($server->connection, $mobDB, $fromTables);
 
 		$ids = array_keys($mobIDs);
 		$sql = "SELECT ID, iName FROM {$server->charMapDatabase}.monsters WHERE ID IN (".implode(',', array_fill(0, count($ids), '?')).")";
